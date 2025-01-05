@@ -1,0 +1,309 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import ProfilePicture from '../../components/ProfilePicture';
+
+function TouristProfile() {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phoneNumber: '',
+    country: '',
+    dateOfBirth: '',
+    gender: '',
+    preferredLanguage: 'English',
+    emergencyContactName: '',
+    emergencyContactPhone: '',
+    travelPreferences: [],
+    profilePicture: null,
+    password: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+
+  // State for profile picture preview
+  const [profilePreview, setProfilePreview] = useState(null);
+
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+
+
+  useEffect(() => {
+    // Get user info from localStorage
+    const userJson = localStorage.getItem('user');
+    const token = localStorage.getItem('token');
+
+    if (!userJson || !token) {
+      // Redirect to login if no user found
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const userData = JSON.parse(userJson);
+      setUser(userData);
+
+      // Fetch complete profile data from API
+      const fetchProfileData = async () => {
+        try {
+          const response = await fetch('http://localhost:5000/api/tourists/profile', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+
+          if (!response.ok) {
+            throw new Error('Failed to fetch profile data');
+          }
+
+          const data = await response.json();
+
+          if (data.success && data.data) {
+            const profileData = data.data;
+
+            // If there's a profile picture, set the preview
+            if (profileData.ProfilePicture) {
+              // Handle different profile picture path formats
+              let picturePath = profileData.ProfilePicture;
+
+              // If it's NULL or empty string in the database
+              if (!picturePath || picturePath === 'NULL') {
+                console.log("No profile picture found");
+              } else {
+                // Set a timestamp to prevent caching
+                const timestamp = new Date().getTime();
+
+                // Use the full URL to the uploads directory
+                // The path is already stored with the subdirectory in the database
+                const fullPath = `http://localhost:5000/uploads/${picturePath}?t=${timestamp}`;
+                console.log("Setting profile picture preview:", fullPath);
+
+                // Set the preview immediately to avoid blinking
+                setProfilePreview(fullPath);
+
+                // Add debug logging to help diagnose image loading issues
+                console.log("Profile picture data:", {
+                  originalPath: picturePath,
+                  fullPath: fullPath,
+                  timestamp: timestamp
+                });
+              }
+            }
+
+            // Parse travel preferences if they exist
+            let travelPrefs = [];
+            if (profileData.TravelPreferences) {
+              try {
+                travelPrefs = JSON.parse(profileData.TravelPreferences);
+              } catch (e) {
+                console.error('Failed to parse travel preferences', e);
+              }
+            }
+
+            // Set form data with all available profile information
+            setFormData({
+              name: profileData.Name || userData.name || '',
+              email: profileData.Email || userData.email || '',
+              phoneNumber: profileData.PhoneNumber || '',
+              country: profileData.Country || '',
+              dateOfBirth: profileData.DateOfBirth ? new Date(profileData.DateOfBirth).toISOString().split('T')[0] : '',
+              gender: profileData.Gender || '',
+              preferredLanguage: profileData.PreferredLanguage || 'English',
+              emergencyContactName: profileData.EmergencyContactName || '',
+              emergencyContactPhone: profileData.EmergencyContactPhone || '',
+              travelPreferences: travelPrefs,
+              password: '',
+              newPassword: '',
+              confirmPassword: ''
+            });
+          } else {
+            // Fallback to basic user data if API call fails
+            setFormData({
+              name: userData.name || '',
+              email: userData.email || '',
+              phoneNumber: '',
+              country: '',
+              dateOfBirth: '',
+              gender: '',
+              preferredLanguage: 'English',
+              emergencyContactName: '',
+              emergencyContactPhone: '',
+              travelPreferences: [],
+              password: '',
+              newPassword: '',
+              confirmPassword: ''
+            });
+          }
+        } catch (error) {
+          console.error('Error fetching profile data:', error);
+          // Fallback to basic user data if API call fails
+          setFormData({
+            name: userData.name || '',
+            email: userData.email || '',
+            phoneNumber: '',
+            country: '',
+            dateOfBirth: '',
+            gender: '',
+            preferredLanguage: 'English',
+            emergencyContactName: '',
+            emergencyContactPhone: '',
+            travelPreferences: [],
+            password: '',
+            newPassword: '',
+            confirmPassword: ''
+          });
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchProfileData();
+    } catch (error) {
+      console.error('Failed to parse user data', error);
+      navigate('/login');
+    }
+  }, [navigate]);
+
+  const handleChange = (e) => {
+    const { name, value, type, checked, files } = e.target;
+
+    if (type === 'file') {
+      // Handle file upload (profile picture)
+      if (files && files[0]) {
+        // Validate file type
+        const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+        if (!validTypes.includes(files[0].type)) {
+          setFormErrors({
+            ...formErrors,
+            profilePicture: 'Please select a valid image file (JPEG, PNG, GIF, WEBP)'
+          });
+          return;
+        }
+
+        // Validate file size (max 5MB)
+        if (files[0].size > 5 * 1024 * 1024) {
+          setFormErrors({
+            ...formErrors,
+            profilePicture: 'Image size should be less than 5MB'
+          });
+          return;
+        }
+
+        setFormData({
+          ...formData,
+          [name]: files[0]
+        });
+
+        // Create preview URL
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setProfilePreview(e.target.result);
+        };
+        reader.readAsDataURL(files[0]);
+
+        // Clear any previous errors
+        if (formErrors.profilePicture) {
+          setFormErrors({
+            ...formErrors,
+            profilePicture: ''
+          });
+        }
+      }
+    } else if (type === 'checkbox') {
+      // Handle checkbox for travel preferences
+      if (name === 'travelPreferences') {
+        const updatedPreferences = [...formData.travelPreferences];
+
+        if (checked) {
+          // Add preference if checked
+          if (!updatedPreferences.includes(value)) {
+            updatedPreferences.push(value);
+          }
+        } else {
+          // Remove preference if unchecked
+          const index = updatedPreferences.indexOf(value);
+          if (index !== -1) {
+            updatedPreferences.splice(index, 1);
+          }
+        }
+
+        setFormData({
+          ...formData,
+          travelPreferences: updatedPreferences
+        });
+      } else {
+        // Handle other checkboxes
+        setFormData({
+          ...formData,
+          [name]: checked
+        });
+      }
+    } else {
+      // Handle regular inputs
+      setFormData({
+        ...formData,
+        [name]: value
+      });
+    }
+
+    // Clear error when user types
+    if (formErrors[name]) {
+      setFormErrors({
+        ...formErrors,
+        [name]: ''
+      });
+    }
+
+    // Clear success message when user starts editing
+    if (successMessage) {
+      setSuccessMessage('');
+    }
+  };
+
+  const validateForm = () => {
+    const errors = {};
+
+    // Required fields validation
+    if (!formData.name.trim()) {
+      errors.name = 'Name is required';
+    }
+
+    if (!formData.email.trim()) {
+      errors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      errors.email = 'Email is invalid';
+    }
+
+    // Phone number validation (optional field)
+    if (formData.phoneNumber && !/^\+?[0-9]{10,15}$/.test(formData.phoneNumber.replace(/\s/g, ''))) {
+      errors.phoneNumber = 'Please enter a valid phone number';
+    }
+
+    // Emergency contact phone validation (optional field)
+    if (formData.emergencyContactPhone && !/^\+?[0-9]{10,15}$/.test(formData.emergencyContactPhone.replace(/\s/g, ''))) {
+      errors.emergencyContactPhone = 'Please enter a valid emergency contact phone number';
+    }
+
+    // Password change validation
+    if (formData.newPassword || formData.confirmPassword) {
+      // Current password is required if trying to set a new password
+      if (!formData.password) {
+        errors.password = 'Current password is required to set a new password';
+      }
+
+      // New password requirements
+      if (formData.newPassword && formData.newPassword.length < 8) {
+        errors.newPassword = 'New password must be at least 8 characters';
+      }
+
+      // Password confirmation must match
+      if (formData.newPassword !== formData.confirmPassword) {
+        errors.confirmPassword = 'Passwords do not match';
+      }
+    }
+
+    return errors;
+  };

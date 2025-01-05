@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+        .success {
+            color: green;
+            margin-top: 10px;
+        }
+        #response {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <h1>Login Test</h1>
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <button id="loginBtn">Login</button>
+    <div id="message"></div>
+    <h3>Response:</h3>
+    <pre id="response"></pre>
+
+    <script>
+        document.getElementById('loginBtn').addEventListener('click', async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const messageEl = document.getElementById('message');
+            const responseEl = document.getElementById('response');
+            
+            if (!email || !password) {
+                messageEl.className = 'error';
+                messageEl.textContent = 'Please enter both email and password';
+                return;
+            }
+            
+            try {
+                messageEl.textContent = 'Logging in...';
+                
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                // Display the full response
+                responseEl.textContent = JSON.stringify(data, null, 2);
+                
+                if (response.ok) {
+                    messageEl.className = 'success';
+                    messageEl.textContent = 'Login successful!';
+                    
+                    // Store token in localStorage
+                    if (data.data && data.data.token) {
+                        localStorage.setItem('token', data.data.token);
+                        localStorage.setItem('refreshToken', data.data.refreshToken);
+                        localStorage.setItem('userData', JSON.stringify(data.data));
+                    }
+                } else {
+                    messageEl.className = 'error';
+                    messageEl.textContent = data.message || 'Login failed';
+                }
+            } catch (error) {
+                messageEl.className = 'error';
+                messageEl.textContent = 'Error: ' + error.message;
+                console.error('Login error:', error);
+            }
+        });
+    </script>
+</body>
+</html>

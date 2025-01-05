@@ -1,0 +1,33 @@
+flowchart TD
+    A[Start] --> B[Register/Login]
+    B --> C[Browse Destinations]
+    C --> D[Select Destination]
+    D --> E[Plan Trip - Select Date/Time]
+    E --> F[Select Vehicle]
+    F --> G[Make Payment]
+    G --> H[Receive Booking Confirmation]
+    H --> I[View Dashboard]
+    
+    I --> J{Need to View Details?}
+    J -->|Yes| K[View Trip Details]
+    J -->|No| M
+    
+    I --> L{Trip Completed?}
+    L -->|Yes| N[Leave Review]
+    L -->|No| M
+    
+    I --> O{Cancel Trip?}
+    O -->|Yes| P[Submit Cancellation]
+    O -->|No| M
+    
+    K --> M
+    N --> M
+    P --> M
+    
+    M[Continue Using System] --> Q[End]
+    
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style H fill:#bbf,stroke:#333,stroke-width:2px
+    style Q fill:#f9f,stroke:#333,stroke-width:2px
+    style N fill:#bfb,stroke:#333,stroke-width:2px
+    style P fill:#fbb,stroke:#333,stroke-width:2px

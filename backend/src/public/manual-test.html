@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Image Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .image-test {
+            margin-top: 20px;
+        }
+        .image-container {
+            margin-top: 10px;
+            border: 1px solid #eee;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .image-container img {
+            max-width: 100%;
+            max-height: 200px;
+            display: block;
+            margin: 10px 0;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .url-display {
+            font-family: monospace;
+            background-color: #f5f5f5;
+            padding: 10px;
+            border-radius: 4px;
+            word-break: break-all;
+            margin: 10px 0;
+        }
+        .error {
+            color: red;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Manual Image Test</h1>
+    
+    <div class="test-section">
+        <h2>1. Direct Image Test</h2>
+        <p>This tests loading images directly from the server with a specific path.</p>
+        
+        <div class="image-test">
+            <label for="imagePath">Image Path:</label>
+            <input type="text" id="imagePath" value="profile-pictures/1747021942220-323303409.png">
+            
+            <div class="url-display" id="fullUrl"></div>
+            
+            <div class="image-container">
+                <img id="testImage" src="" alt="Test Image">
+                <div id="errorMessage" class="error"></div>
+            </div>
+            
+            <button onclick="loadImage()">Load Image</button>
+            <button onclick="refreshImage()">Refresh Image</button>
+            <button onclick="openInNewTab()">Open in New Tab</button>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. All Known Images</h2>
+        <p>This tests all known profile images in the system.</p>
+        
+        <div id="allImages"></div>
+        <button onclick="loadAllImages()">Load All Images</button>
+        <button onclick="refreshAllImages()">Refresh All Images</button>
+    </div>
+    
+    <script>
+        // Image paths from the directory listing
+        const knownImages = [
+            'profile-pictures/1747021942220-323303409.png',
+            'profile-pictures/1747025206069-982787919.jpg',
+            'profile-pictures/1747025342176-299590845.jpg',
+            'profile-pictures/1747025596569-339426563.jpg',
+            'profile-pictures/1747028448251-904464168.jpg'
+        ];
+        
+        // Base URL for the uploads directory
+        const baseUrl = 'http://localhost:5000/uploads';
+        
+        // Function to load a single image
+        function loadImage() {
+            const imagePath = document.getElementById('imagePath').value;
+            const timestamp = new Date().getTime();
+            const fullUrl = `${baseUrl}/${imagePath}?t=${timestamp}`;
+            
+            document.getElementById('fullUrl').textContent = fullUrl;
+            
+            const img = document.getElementById('testImage');
+            const errorMessage = document.getElementById('errorMessage');
+            
+            img.onload = function() {
+                errorMessage.textContent = '';
+            };
+            
+            img.onerror = function() {
+                errorMessage.textContent = `Error loading image: ${fullUrl}`;
+            };
+            
+            img.src = fullUrl;
+        }
+        
+        // Function to refresh the current image
+        function refreshImage() {
+            loadImage();
+        }
+        
+        // Function to open the current image in a new tab
+        function openInNewTab() {
+            const imagePath = document.getElementById('imagePath').value;
+            const timestamp = new Date().getTime();
+            const fullUrl = `${baseUrl}/${imagePath}?t=${timestamp}`;
+            
+            window.open(fullUrl, '_blank');
+        }
+        
+        // Function to load all known images
+        function loadAllImages() {
+            const container = document.getElementById('allImages');
+            container.innerHTML = '';
+            
+            knownImages.forEach((path, index) => {
+                const timestamp = new Date().getTime();
+                const fullUrl = `${baseUrl}/${path}?t=${timestamp}`;
+                
+                const imageDiv = document.createElement('div');
+                imageDiv.className = 'image-container';
+                imageDiv.innerHTML = `
+                    <h3>Image ${index + 1}</h3>
+                    <p class="url-display">${path}</p>
+                    <img src="${fullUrl}" alt="Image ${index + 1}" id="img-${index}">
+                    <div class="error" id="error-${index}"></div>
+                `;
+                
+                container.appendChild(imageDiv);
+                
+                const img = document.getElementById(`img-${index}`);
+                const errorDiv = document.getElementById(`error-${index}`);
+                
+                img.onload = function() {
+                    errorDiv.textContent = '';
+                };
+                
+                img.onerror = function() {
+                    errorDiv.textContent = `Error loading image: ${fullUrl}`;
+                };
+            });
+        }
+        
+        // Function to refresh all images
+        function refreshAllImages() {
+            loadAllImages();
+        }
+        
+        // Load the default image on page load
+        window.onload = function() {
+            loadImage();
+            loadAllImages();
+        };
+    </script>
+</body>
+</html>

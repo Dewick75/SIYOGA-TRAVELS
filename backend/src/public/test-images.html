@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Image Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .image-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .image-container {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .image-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .image-info {
+            padding: 15px;
+        }
+        .image-path {
+            font-size: 12px;
+            color: #666;
+            word-break: break-all;
+            margin-top: 5px;
+        }
+        .error {
+            color: #e74c3c;
+            padding: 10px;
+            background-color: #fadbd8;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .success {
+            color: #27ae60;
+            padding: 10px;
+            background-color: #d4efdf;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .button {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 4px;
+            text-decoration: none;
+            margin-right: 5px;
+            font-size: 14px;
+        }
+        .button:hover {
+            background-color: #2980b9;
+        }
+        .button.refresh {
+            background-color: #9b59b6;
+        }
+        .button.refresh:hover {
+            background-color: #8e44ad;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Profile Image Test</h1>
+        <div id="message"></div>
+        
+        <div id="image-grid" class="image-grid">
+            <!-- Images will be loaded here -->
+            <div class="loading">Loading profile images...</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageGrid = document.getElementById('image-grid');
+            const messageDiv = document.getElementById('message');
+            
+            // Fetch profile pictures
+            fetch('/api/tourists/test-profile-picture')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    imageGrid.innerHTML = ''; // Clear loading message
+                    
+                    if (!data.success || !data.data || data.data.length === 0) {
+                        messageDiv.innerHTML = `<div class="error">No profile pictures found</div>`;
+                        return;
+                    }
+                    
+                    messageDiv.innerHTML = `<div class="success">Found ${data.count} profile pictures</div>`;
+                    
+                    // Create image cards
+                    data.data.forEach(profile => {
+                        const imagePath = profile.ProfilePicture;
+                        const imageUrl = `/uploads/${imagePath}`;
+                        
+                        const card = document.createElement('div');
+                        card.className = 'image-card';
+                        
+                        card.innerHTML = `
+                            <div class="image-container">
+                                <img src="${imageUrl}" alt="${profile.Name}" onerror="this.src='https://via.placeholder.com/150?text=Error'; this.parentElement.style.backgroundColor='#fadbd8';">
+                            </div>
+                            <div class="image-info">
+                                <h3>${profile.Name}</h3>
+                                <div class="image-path">Path: ${imagePath}</div>
+                                <div style="margin-top: 10px;">
+                                    <a href="${imageUrl}" target="_blank" class="button">Open Image</a>
+                                    <a href="#" class="button refresh" data-path="${imagePath}">Refresh</a>
+                                </div>
+                            </div>
+                        `;
+                        
+                        imageGrid.appendChild(card);
+                    });
+                    
+                    // Add event listeners to refresh buttons
+                    document.querySelectorAll('.button.refresh').forEach(button => {
+                        button.addEventListener('click', function(e) {
+                            e.preventDefault();
+                            const path = this.getAttribute('data-path');
+                            const imageUrl = `/uploads/${path}?t=${new Date().getTime()}`;
+                            const imgElement = this.closest('.image-card').querySelector('img');
+                            imgElement.src = imageUrl;
+                        });
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching profile pictures:', error);
+                    messageDiv.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+                    imageGrid.innerHTML = '';
+                });
+        });
+    </script>
+</body>
+</html>

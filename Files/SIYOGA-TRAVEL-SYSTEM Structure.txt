@@ -1,0 +1,301 @@
+SIYOGA-TRAVEL-SYSTEM/
+├── frontend/                         # Frontend React application
+│   ├── public/                       # Static files
+│   │   ├── favicon.ico
+│   │   ├── index.html
+│   │   ├── manifest.json
+│   │   ├── robots.txt
+│   │   └── assets/                   # Public assets
+│   │       ├── images/
+│   │       │   ├── destinations/     # Destination images
+│   │       │   ├── vehicles/         # Vehicle type images
+│   │       │   └── logo.png          # Site logo
+│   │       └── icons/                # System icons
+│   │
+│   ├── src/                          # Source code
+│   │   ├── assets/                   # Static assets
+│   │   │   ├── react.svg
+│   │   │   ├── logo.svg              # App logo
+│   │   │   ├── hero-image.jpg        # Homepage hero image
+│   │   │   └── placeholder.png       # Image placeholder
+│   │   │
+│   │   ├── components/               # Reusable UI components
+│   │   │   ├── admin/                # Admin-specific components
+│   │   │   │   ├── DriverTable.jsx   # Driver management table
+│   │   │   │   ├── BookingTable.jsx  # Booking management table
+│   │   │   │   ├── StatCard.jsx      # Statistics display card
+│   │   │   │   └── UserApproval.jsx  # User approval interface
+│   │   │   │
+│   │   │   ├── common/               # Shared components
+│   │   │   │   ├── Footer.jsx        # Page footer
+│   │   │   │   ├── Navbar.jsx        # Navigation header
+│   │   │   │   ├── ProtectedRoute.jsx # Route protection component
+│   │   │   │   ├── LoadingSpinner.jsx # Loading indicator
+│   │   │   │   ├── ErrorAlert.jsx    # Error message display
+│   │   │   │   ├── SuccessAlert.jsx  # Success message display
+│   │   │   │   ├── FormInput.jsx     # Reusable form input field
+│   │   │   │   ├── Modal.jsx         # Reusable modal component
+│   │   │   │   ├── Pagination.jsx    # Pagination component
+│   │   │   │   └── Rating.jsx        # Star rating component
+│   │   │   │
+│   │   │   ├── driver/               # Driver-specific components
+│   │   │   │   ├── BookingCard.jsx   # Driver booking display
+│   │   │   │   ├── EarningsChart.jsx # Earnings visualization
+│   │   │   │   ├── VehicleCard.jsx   # Vehicle information card
+│   │   │   │   └── TripDetail.jsx    # Trip details display
+│   │   │   │
+│   │   │   └── tourist/              # Tourist-specific components
+│   │   │       ├── DestinationCard.jsx # Destination display card
+│   │   │       ├── BookingHistoryItem.jsx # Booking history item
+│   │   │       ├── TripPlannerStep.jsx   # Trip planning steps
+│   │   │       ├── VehicleSelectionCard.jsx # Vehicle selection card
+│   │   │       ├── PaymentMethodSelector.jsx # Payment method options
+│   │   │       └── BookingSummary.jsx    # Booking summary display
+│   │   │
+│   │   ├── context/                  # Context providers
+│   │   │   ├── AuthContext.jsx       # Authentication context
+│   │   │   ├── BookingContext.jsx    # Booking data context
+│   │   │   ├── NotificationContext.jsx # Notification system context
+│   │   │   └── ThemeContext.jsx      # Theme management (future use)
+│   │   │
+│   │   ├── hooks/                    # Custom React hooks
+│   │   │   ├── useAuth.jsx           # Auth context hook
+│   │   │   ├── useBooking.jsx        # Booking context hook 
+│   │   │   ├── useForm.jsx           # Form handling hook
+│   │   │   ├── useNotification.jsx   # Notification hook
+│   │   │   ├── useLocalStorage.jsx   # Local storage interactions
+│   │   │   └── useWindowSize.jsx     # Responsive design hook
+│   │   │
+│   │   ├── layouts/                  # Page layout components
+│   │   │   ├── MainLayout.jsx        # Main page layout with nav/footer
+│   │   │   ├── DashboardLayout.jsx   # Dashboard layout
+│   │   │   └── AuthLayout.jsx        # Authentication pages layout
+│   │   │
+│   │   ├── pages/                    # Page components
+│   │   │   ├── admin/                # Admin pages
+│   │   │   │   ├── Dashboard.jsx     # Admin dashboard
+│   │   │   │   ├── DriverManagement.jsx # Driver approval/management
+│   │   │   │   ├── BookingManagement.jsx # Booking monitoring
+│   │   │   │   ├── DestinationManagement.jsx # Destination management
+│   │   │   │   ├── ReportPage.jsx    # System reports
+│   │   │   │   └── SystemSettings.jsx # System configuration
+│   │   │   │
+│   │   │   ├── auth/                 # Authentication pages
+│   │   │   │   ├── LoginPage.jsx     # User login
+│   │   │   │   ├── TouristRegister.jsx # Tourist registration
+│   │   │   │   ├── DriverRegistration.jsx # Driver registration
+│   │   │   │   ├── VehicleRegistration.jsx # Vehicle registration
+│   │   │   │   ├── ForgotPassword.jsx # Password recovery
+│   │   │   │   └── ResetPassword.jsx # Password reset
+│   │   │   │
+│   │   │   ├── driver/               # Driver pages
+│   │   │   │   ├── Dashboard.jsx     # Driver dashboard
+│   │   │   │   ├── VehicleManagement.jsx # Vehicle management
+│   │   │   │   ├── BookingRequests.jsx # Incoming booking requests
+│   │   │   │   ├── TripDetails.jsx   # Trip details view
+│   │   │   │   ├── EarningsReport.jsx # Earnings statistics
+│   │   │   │   └── Profile.jsx       # Driver profile management
+│   │   │   │
+│   │   │   ├── tourist/              # Tourist pages
+│   │   │   │   ├── Dashboard.jsx     # Tourist dashboard
+│   │   │   │   ├── SearchDestinations.jsx # Destination search
+│   │   │   │   ├── DestinationDetail.jsx # Single destination view
+│   │   │   │   ├── PlanTrip.jsx      # Trip planning
+│   │   │   │   ├── SelectVehicle.jsx # Vehicle selection
+│   │   │   │   ├── Payment.jsx       # Payment processing
+│   │   │   │   ├── BookingConfirmation.jsx # Booking confirmation
+│   │   │   │   ├── BookingHistory.jsx # Past bookings
+│   │   │   │   ├── TripDetail.jsx    # Trip details view
+│   │   │   │   └── Profile.jsx       # Tourist profile management
+│   │   │   │
+│   │   │   ├── static/               # Static content pages
+│   │   │   │   ├── AboutPage.jsx     # About us
+│   │   │   │   ├── ContactPage.jsx   # Contact information
+│   │   │   │   ├── FAQPage.jsx       # Frequently asked questions
+│   │   │   │   ├── PrivacyPolicy.jsx # Privacy policy
+│   │   │   │   └── TermsOfService.jsx # Terms of service
+│   │   │   │
+│   │   │   ├── HomePage.jsx          # Landing page
+│   │   │   └── NotFound.jsx          # 404 page
+│   │   │
+│   │   ├── services/                 # API service functions
+│   │   │   ├── api.js                # Base API configuration
+│   │   │   ├── authService.js        # Authentication API calls
+│   │   │   ├── touristService.js     # Tourist-specific API calls
+│   │   │   ├── driverService.js      # Driver-specific API calls
+│   │   │   ├── adminService.js       # Admin-specific API calls
+│   │   │   ├── bookingService.js     # Booking-related API calls
+│   │   │   └── paymentService.js     # Payment processing services
+│   │   │
+│   │   ├── utils/                    # Utility functions
+│   │   │   ├── dateUtils.js          # Date formatting and manipulation
+│   │   │   ├── formatUtils.js        # Data formatting helpers
+│   │   │   ├── validationUtils.js    # Form validation helpers
+│   │   │   ├── constants.js          # Application constants
+│   │   │   └── localStorage.js       # Local storage utilities
+│   │   │
+│   │   ├── App.css                   # Global styles
+│   │   ├── App.jsx                   # Main application component with routes
+│   │   ├── index.css                 # Tailwind imports & global styles
+│   │   └── main.jsx                  # Entry point
+│   │
+│   ├── .eslintrc.js                  # ESLint configuration
+│   ├── .gitignore                    # Git ignore file
+│   ├── .prettierrc                   # Prettier configuration
+│   ├── index.html                    # HTML entry point
+│   ├── package-lock.json             # Dependency lock file
+│   ├── package.json                  # Project dependencies
+│   ├── README.md                     # Frontend documentation
+│   ├── tailwind.config.js            # Tailwind CSS configuration
+│   ├── postcss.config.js             # PostCSS configuration
+│   └── vite.config.js                # Vite configuration
+│
+├── backend/                         # Backend Node.js application
+│   ├── src/                         # Source code
+│   │   ├── config/                  # Configuration files
+│   │   │   ├── database.js          # Database connection setup
+│   │   │   ├── config.js            # App configuration
+│   │   │   └── logger.js            # Logging configuration
+│   │   │
+│   │   ├── controllers/             # Route controllers
+│   │   │   ├── authController.js    # Authentication controller
+│   │   │   ├── userController.js    # User management controller
+│   │   │   ├── touristController.js # Tourist-specific controller
+│   │   │   ├── driverController.js  # Driver-specific controller
+│   │   │   ├── vehicleController.js # Vehicle management controller
+│   │   │   ├── destinationController.js # Destination controller
+│   │   │   ├── bookingController.js # Booking controller
+│   │   │   ├── paymentController.js # Payment processing controller
+│   │   │   └── adminController.js   # Admin functions controller
+│   │   │
+│   │   ├── middleware/              # Express middleware
+│   │   │   ├── auth.js              # Authentication middleware
+│   │   │   ├── error.js             # Error handling middleware
+│   │   │   ├── validator.js         # Request validation middleware
+│   │   │   ├── rateLimiter.js       # API rate limiting
+│   │   │   └── logger.js            # Request logging
+│   │   │
+│   │   ├── models/                  # Database models
+│   │   │   ├── User.js              # User model
+│   │   │   ├── Tourist.js           # Tourist model
+│   │   │   ├── Driver.js            # Driver model
+│   │   │   ├── Vehicle.js           # Vehicle model
+│   │   │   ├── Destination.js       # Destination model
+│   │   │   ├── Booking.js           # Booking model
+│   │   │   ├── Payment.js           # Payment model
+│   │   │   └── Review.js            # Review/rating model
+│   │   │
+│   │   ├── routes/                  # API routes
+│   │   │   ├── auth.routes.js       # Authentication routes
+│   │   │   ├── user.routes.js       # User management routes
+│   │   │   ├── tourist.routes.js    # Tourist-specific routes
+│   │   │   ├── driver.routes.js     # Driver-specific routes
+│   │   │   ├── vehicle.routes.js    # Vehicle management routes
+│   │   │   ├── destination.routes.js # Destination routes
+│   │   │   ├── booking.routes.js    # Booking routes
+│   │   │   ├── payment.routes.js    # Payment processing routes
+│   │   │   └── admin.routes.js      # Admin function routes
+│   │   │
+│   │   ├── services/                # Business logic services
+│   │   │   ├── authService.js       # Authentication service
+│   │   │   ├── emailService.js      # Email notification service
+│   │   │   ├── paymentService.js    # Payment gateway integration
+│   │   │   ├── notificationService.js # User notification service
+│   │   │   └── reportService.js     # Reporting service
+│   │   │
+│   │   ├── utils/                   # Utility functions
+│   │   │   ├── errorHandler.js      # Custom error handler
+│   │   │   ├── validators.js        # Input validation helpers
+│   │   │   ├── tokenManager.js      # JWT token functions
+│   │   │   ├── formatters.js        # Data formatting helpers
+│   │   │   └── constants.js         # Backend constants
+│   │   │
+│   │   ├── app.js                   # Express app configuration
+│   │   └── server.js                # Server entry point
+│   │
+│   ├── tests/                       # Test files
+│   │   ├── integration/             # Integration tests
+│   │   │   ├── auth.test.js
+│   │   │   ├── booking.test.js
+│   │   │   └── payment.test.js
+│   │   │
+│   │   └── unit/                    # Unit tests
+│   │       ├── controllers/
+│   │       ├── models/
+│   │       └── services/
+│   │
+│   ├── .env                         # Environment variables
+│   ├── .env.example                 # Example env configuration
+│   ├── .eslintrc.js                 # ESLint configuration
+│   ├── .gitignore                   # Git ignore file
+│   ├── package-lock.json            # Dependency lock file
+│   ├── package.json                 # Project dependencies
+│   ├── nodemon.json                 # Nodemon configuration
+│   ├── jest.config.js               # Jest test configuration
+│   └── README.md                    # Backend documentation
+│
+├── database/                        # Database management
+│   ├── migrations/                  # Database migrations
+│   │   ├── 01_create_users_table.sql
+│   │   ├── 02_create_tourists_table.sql
+│   │   ├── 03_create_drivers_table.sql
+│   │   ├── 04_create_vehicles_table.sql
+│   │   ├── 05_create_destinations_table.sql
+│   │   ├── 06_create_bookings_table.sql
+│   │   ├── 07_create_payments_table.sql
+│   │   └── 08_create_reviews_table.sql
+│   │
+│   ├── seeders/                     # Seed data
+│   │   ├── 01_seed_users.sql
+│   │   ├── 02_seed_destinations.sql
+│   │   └── 03_seed_vehicles.sql
+│   │
+│   ├── scripts/                     # Database management scripts
+│   │   ├── backup.sh                # Database backup script
+│   │   ├── restore.sh               # Database restore script
+│   │   └── setup.sh                 # Initial database setup
+│   │
+│   └── schema.sql                   # Complete database schema
+│
+├── docs/                            # Project documentation
+│   ├── api/                         # API documentation
+│   │   ├── auth.md
+│   │   ├── bookings.md
+│   │   └── vehicles.md
+│   │
+│   ├── architecture/                # Architecture diagrams
+│   │   ├── system_architecture.png
+│   │   └── database_schema.png
+│   │
+│   ├── user-guides/                 # User documentation
+│   │   ├── tourist_guide.md
+│   │   ├── driver_guide.md
+│   │   └── admin_guide.md
+│   │
+│   ├── development/                 # Developer documentation
+│   │   ├── setup.md
+│   │   ├── coding_standards.md
+│   │   └── deployment.md
+│   │
+│   └── README.md                    # Documentation overview
+│
+├── docker/                          # Docker configuration
+│   ├── frontend/                    # Frontend Docker files
+│   │   └── Dockerfile
+│   │
+│   ├── backend/                     # Backend Docker files
+│   │   └── Dockerfile
+│   │
+│   ├── database/                    # Database Docker files
+│   │   └── Dockerfile
+│   │
+│   ├── docker-compose.yml           # Docker Compose configuration
+│   └── README.md                    # Docker setup instructions
+│
+├── .gitignore                       # Git ignore file
+├── .github/                         # GitHub configuration
+│   └── workflows/                   # GitHub Actions
+│       ├── frontend-ci.yml          # Frontend CI pipeline
+│       └── backend-ci.yml           # Backend CI pipeline
+│
+└── README.md                        # Project overview

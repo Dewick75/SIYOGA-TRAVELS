@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Image Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .image-container {
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 10px 0;
+        }
+        .image-path {
+            font-family: monospace;
+            background-color: #f5f5f5;
+            padding: 5px;
+            border-radius: 3px;
+            word-break: break-all;
+        }
+        button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Direct Image Test</h1>
+    
+    <div class="image-container">
+        <h2>Test Image 1</h2>
+        <p class="image-path">/uploads/profile-pictures/1747021942220-323303409.png</p>
+        <img src="/uploads/profile-pictures/1747021942220-323303409.png" alt="Test Image 1">
+        <button onclick="refreshImage(this)">Refresh Image</button>
+        <a href="/uploads/profile-pictures/1747021942220-323303409.png" target="_blank">
+            <button>Open in New Tab</button>
+        </a>
+    </div>
+
+    <div class="image-container">
+        <h2>Test Image 2</h2>
+        <p class="image-path">/uploads/profile-pictures/1747025206069-982787919.jpg</p>
+        <img src="/uploads/profile-pictures/1747025206069-982787919.jpg" alt="Test Image 2">
+        <button onclick="refreshImage(this)">Refresh Image</button>
+        <a href="/uploads/profile-pictures/1747025206069-982787919.jpg" target="_blank">
+            <button>Open in New Tab</button>
+        </a>
+    </div>
+
+    <div class="image-container">
+        <h2>Test Image 3</h2>
+        <p class="image-path">/uploads/profile-pictures/1747025342176-299590845.jpg</p>
+        <img src="/uploads/profile-pictures/1747025342176-299590845.jpg" alt="Test Image 3">
+        <button onclick="refreshImage(this)">Refresh Image</button>
+        <a href="/uploads/profile-pictures/1747025342176-299590845.jpg" target="_blank">
+            <button>Open in New Tab</button>
+        </a>
+    </div>
+
+    <div class="image-container">
+        <h2>Test Image 4</h2>
+        <p class="image-path">/uploads/profile-pictures/1747025596569-339426563.jpg</p>
+        <img src="/uploads/profile-pictures/1747025596569-339426563.jpg" alt="Test Image 4">
+        <button onclick="refreshImage(this)">Refresh Image</button>
+        <a href="/uploads/profile-pictures/1747025596569-339426563.jpg" target="_blank">
+            <button>Open in New Tab</button>
+        </a>
+    </div>
+
+    <div class="image-container">
+        <h2>Test Image 5</h2>
+        <p class="image-path">/uploads/profile-pictures/1747028448251-904464168.jpg</p>
+        <img src="/uploads/profile-pictures/1747028448251-904464168.jpg" alt="Test Image 5">
+        <button onclick="refreshImage(this)">Refresh Image</button>
+        <a href="/uploads/profile-pictures/1747028448251-904464168.jpg" target="_blank">
+            <button>Open in New Tab</button>
+        </a>
+    </div>
+
+    <script>
+        function refreshImage(button) {
+            const img = button.parentElement.querySelector('img');
+            const originalSrc = img.src.split('?')[0];
+            img.src = originalSrc + '?t=' + new Date().getTime();
+        }
+    </script>
+</body>
+</html>

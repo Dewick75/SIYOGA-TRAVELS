@@ -1,0 +1,48 @@
+SIYOGA-TRAVEL-SYSTEM-NEW/
+├── backend/
+│   ├── src/
+│   │   ├── config/
+│   │   │   ├── DB/
+│   │   │   │   └── db.js                   # Your existing db.js file
+│   │   │   ├── config.js                   # App configuration
+│   │   │   └── logger.js                   # Logging configuration
+│   │   │
+│   │   ├── controllers/                    # Create this folder
+│   │   │   ├── authController.js           # Authentication controller
+│   │   │   ├── destinationController.js    # Destination controller
+│   │   │   ├── vehicleController.js        # Vehicle controller
+│   │   │   ├── bookingController.js        # Booking controller
+│   │   │   ├── paymentController.js        # Payment controller
+│   │   │   └── reviewController.js         # Review controller
+│   │   │
+│   │   ├── middleware/                     # Create this folder
+│   │   │   ├── auth.js                     # Authentication middleware
+│   │   │   ├── error.js                    # Error handling middleware
+│   │   │   ├── validator.js                # Request validation
+│   │   │   └── upload.js                   # File upload middleware
+│   │   │
+│   │   ├── routes/                         # Create this folder
+│   │   │   ├── authRoutes.js               # Authentication routes
+│   │   │   ├── destinationRoutes.js        # Destination routes
+│   │   │   ├── vehicleRoutes.js            # Vehicle routes
+│   │   │   ├── bookingRoutes.js            # Booking routes
+│   │   │   ├── paymentRoutes.js            # Payment routes
+│   │   │   └── reviewRoutes.js             # Review routes
+│   │   │
+│   │   ├── utils/                          # Create this folder
+│   │   │   ├── errorHandler.js             # Error handling utilities
+│   │   │   └── tokenManager.js             # JWT token management
+│   │   │
+│   │   ├── app.js                          # Express app setup
+│   │   └── server.js                       # Server entry point
+│   │
+│   ├── node_modules/                       # Dependencies (already exists)
+│   ├── package-lock.json                   # Dependencies lock file (already exists)
+│   └── package.json                        # Project config (already exists)
+│
+├── frontend/                               # Your frontend code (already exists)
+│   ├── node_modules/
+│   ├── ...
+│
+└── database/                               # Create this folder
+    └── schema.sql                          # Database schema script
