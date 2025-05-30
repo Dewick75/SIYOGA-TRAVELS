@@ -53,13 +53,12 @@ A modern web application for seamless travel planning and direct vehicle booking
 
 4. Open [http://localhost:3000](http://localhost:3000) to view the app in your browser.
 
-### Backend Setup
-
-> If you have a backend, add setup instructions here.
 
 ## Screenshots
+![image](https://github.com/user-attachments/assets/7cc3fa1f-135c-4a0a-9c6c-c12d8f34d89a)
 
-> Add screenshots or a demo GIF here to showcase the UI and the interactive map.
+
+
 
 ## Contributing
 
